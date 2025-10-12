@@ -88,10 +88,10 @@ public class Square implements SquareInterface, Cloneable
 		assert ((getLocation() != null) && (getSymbol() != null));
       	trace("clone: clone starts");
 
-// COMPLETE ME
+		s = new Square(loc, symbol);
 
       	trace("clone: clone ends");
-		return null;	// CHANGE ME
+		return s;	
 	}
 	
 	

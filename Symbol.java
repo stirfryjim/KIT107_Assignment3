@@ -97,7 +97,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 		
       	trace("setColour: setColour starts");
 
-//COMPLETE ME
+		this.colour = c;
 
       	trace("setColour: setColour ends");
 	}
@@ -118,7 +118,8 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("makeEmpty: makeEmpty starts");
 
-//COMPLETE ME
+		this.empty = true;
+		this.colour = BLANK;
 
       	trace("makeEmpty: makeEmpty ends");
 	}
@@ -138,9 +139,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("getColour: getColour starts and ends");
 
-//COMPLETE ME
-
-		return null;	// CHANGE ME
+		return colour;	
 	}
 	
 	
@@ -158,9 +157,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
-//COMPLETE ME
-
-		return false;	// CHANGE ME
+		return (empty = true);	
 	}
 	
 	
@@ -222,9 +219,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 		
       	trace("equals: equals starts and ends");
 
-//COMPLETE ME
-
-		return false;	// CHANGE ME
+		return (isEmpty() && s.isEmpty()) || (colour == s.getColour());	
 	}
 	
 	
