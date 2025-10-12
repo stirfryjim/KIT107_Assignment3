@@ -61,7 +61,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("Grid: Constructor starts");
       	
-//COMPLETE ME		
+		dimension=d;		
+		initialiseGrid();
 		
       	trace("Grid: Constructor ends");		
 	}
@@ -164,9 +165,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		Location l;
 		
       	trace("clone: clone starts");
-      	
-//COMPLETE ME		
-				
+
+						
       	trace("clone: clone ends");
 		return b;
 	}
@@ -286,8 +286,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	public int getDimension()
 	{
       	trace("getDimension: getDimension starts and ends");
-//COMPLETE ME
-		return 0;	//CHANGE ME
+
+		return dimension;	//CHANGE ME
 	}
 
 
@@ -304,9 +304,9 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	public void setWorth(int v)
 	{
       	trace("setWorth: setWorth starts");
-      	
-//COMPLETE ME		
-		
+      			
+		value = v;
+
       	trace("setWorth: setWorth ends");
 	}
 	
@@ -324,8 +324,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	public int getWorth()
 	{
       	trace("getWorth: getWorth starts and ends");
-//COMPLETE ME
-		return 0;	//CHANGE ME
+
+		return value;	//CHANGE ME
 	}
 	
 	

@@ -2,7 +2,7 @@
 /**
  *	Location ADT
  *
- *	@author <<Your names and Student IDs>>
+ *	@author Mel Goulding 745749
  *	@version October 2025
  *	
  *	This file holds the Location ADT which represents
