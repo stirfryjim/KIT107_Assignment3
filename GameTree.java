@@ -111,7 +111,7 @@ public class GameTree implements GameTreeInterface
 		// non-empty tree
 		trace("getData: getData ends");
 //COMPLETE ME
-		return null;	//CHANGE ME
+		return root.getData();	//CHANGE ME
 	}
 	
 	
