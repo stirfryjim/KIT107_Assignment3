@@ -2,7 +2,7 @@
 /**
  *	GameTree ADT
  *
- *	@author <<Your names and Student IDs>>
+ *	@author Mel Goulding 745749
  *	@version October 2025
  *	
  *	This file holds the GameTree ADT which is a
@@ -111,7 +111,7 @@ public class GameTree implements GameTreeInterface
 		// non-empty tree
 		trace("getData: getData ends");
 //COMPLETE ME
-		return null;	//CHANGE ME
+		return root.getData();	//CHANGE ME
 	}
 	
 	

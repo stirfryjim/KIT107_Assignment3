@@ -267,9 +267,10 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		
       	trace("setDimension: setDimension starts");
       	
-//COMPLETE ME		
+		dimension = d;
+		initialiseGrid();
 		
-      	trace("setDimension: setDimension ends");
+		trace("setDimension: setDimension ends");
 	}
 
 
@@ -287,7 +288,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("getDimension: getDimension starts and ends");
 
-		return dimension;	//CHANGE ME
+		return dimension;
 	}
 
 
@@ -325,7 +326,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("getWorth: getWorth starts and ends");
 
-		return value;	//CHANGE ME
+		return value;
 	}
 	
 	
@@ -351,7 +352,13 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("occupySquare: occupySquare starts");
 
 		// get the square from the grid, put the symbol on it, and put it back in the grid
-//COMPLETE ME
+		try {
+			q = getSquare(l);
+			q.setSymbol(s);
+			setSquare(l, q);
+		} catch (IllegalGridException e) {
+			trace("occupySquare: Illegal location");
+		}
 
       	trace("occupySquare: occupySquare ends");
 	}
@@ -376,9 +383,15 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		assert (l!=null);
 		
       	trace("squareOccupied: squareOccupied starts and ends");
-//COMPLETE ME
 
-		return false;	//CHANGE ME
+		try {
+			Square square = getSquare(l);
+			return !square.isEmpty();
+		} catch(IllegalGridException e){
+			trace("squareOccupied: Illegal location");
+
+			return false;
+		}
 	}
 	
 	
@@ -400,8 +413,15 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		assert (l!=null);
 		
       	trace("getSymbol: getSymbol starts and ends");
-//COMPLETE ME
-		return null;	//CHANGE ME
+
+		try {
+			Square square = getSquare(l);
+			return square.getSymbol();
+		} catch(IllegalGridException e) {
+			trace("getSymbol: Illegal Location");
+
+			return new Symbol();
+		}
 	}
 	
 	
@@ -428,11 +448,14 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		
       	trace("validMove: validMove starts");
       	
-//COMPLETE ME
+		r = l.getRow();
+		c = l.getColumn();
+
+		boolean isValid = (r >= 1 && r <= dimension && c >= 1 && c <= dimension);
 		
 		// check whether the given location is within the bounds of the grid
       	trace("validMove: validMove ends");
-		return false;	//CHANGE ME
+		return isValid;
 	}
 
 
@@ -515,8 +538,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
  		assert (g!=null);
  		
       	trace("equals: equals starts and ends");
-//COMPLETE ME
-		return false;	//CHANGE ME
+
+		return (this.compareTo(g) == 0);
  	}
 
 
@@ -576,10 +599,12 @@ public class Grid implements GridInterface, Cloneable, Comparable
 
       	trace("gameOver: gameOver starts");
 
-//COMPLETE ME
+		if(!win().isEmpty() || fullGrid()){
+			res = true;
+		}
 
 		trace("gameOver: gameOver ends");
-		return false;	//CHANGE ME
+		return res;
     }
 
 

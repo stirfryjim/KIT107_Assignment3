@@ -157,7 +157,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
-		return (empty = true);	
+		return (empty == true);	
 	}
 	
 	
