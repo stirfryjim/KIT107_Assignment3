@@ -48,7 +48,6 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
       	trace("Symbol: Constructor ends");
 	}
 	
-	
 	/**
 	 *	Symbol
 	 *	Constructor method 2.
@@ -157,7 +156,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
-		return (empty = true);	
+		return empty;	
 	}
 	
 	
@@ -277,12 +276,12 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 		if (isEmpty())
 		{
 			// create empty clone
-			s=new Symbol();
+			s = new Symbol();
 		}
 		else
 		{
 			// create non-empty clone and update colour
-			s=new Symbol(true);
+			s = new Symbol(true);
 			s.setColour(getColour());
 		}
 		

@@ -46,7 +46,6 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("Grid: Constructor ends");
 	}
 	
-	
 	/**
 	 *	Grid
 	 *	Constructor method 2.
@@ -66,7 +65,6 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		
       	trace("Grid: Constructor ends");		
 	}
-	
 	
 	/*
 	 *	Grid
@@ -111,7 +109,6 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("Grid: Constructor ends");
 	}
 	
-	
 	/**
 	 *	initialiseGrid
 	 *	Set up the grid.
@@ -130,7 +127,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("initialiseGrid: initialiseGrid starts");
       	
 		// instantiate the table (array of arrays)
-		board=new Square[dimension][dimension];
+		board = new Square[dimension][dimension];
 
 		// initialise every square on the board
 		for (r=1; r<=dimension; r++)
@@ -148,7 +145,6 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("initialiseGrid: initialiseGrid ends");		
 	}
 	
-	
 	/**
 	 *	clone
 	 *	Copy the grid.
@@ -162,15 +158,15 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
 		Grid b;
 		int r,c;
-		Location l;
 		
       	trace("clone: clone starts");
 
-						
+		b = new Grid(dimension);
+		initialiseGrid();
+		
       	trace("clone: clone ends");
 		return b;
 	}
-	
 	
 	/**
 	 *	setSquare
@@ -187,8 +183,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/	
 	public void setSquare(Location l, Square s) throws IllegalGridException
 	{
-		int r;
-		int c;
+		int r, c;
 		
 		assert ((l!=null) && (s!=null));
 		
@@ -204,9 +199,9 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		s.setLocation(l);
 
 		// place the square in the board
-		r=l.getRow();
-		c=l.getColumn();
-		board[r-1][c-1]=s;
+		r = l.getRow();
+		c = l.getColumn();
+		board[r-1][c-1] = s;
 
       	trace("setSquare: setSquare ends");
 	}
@@ -228,13 +223,12 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	public Square getSquare(Location l) throws IllegalGridException
 	{
-		int r;
-		int c;
+		int r, c;
 
 		assert (l!=null);
-		
-      	trace("getSquare: getSquare starts");
 
+      	trace("getSquare: getSquare starts");
+		
 		if (!validMove(l))
 		{
 			trace("getSquare: location not on grid");
@@ -244,11 +238,11 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		// obtain the square at the indicated location from the grid
       	trace("getSquare: getSquare ends");
 		
-		r=l.getRow();
-		c=l.getColumn();
+		r = l.getRow();
+		c = l.getColumn();
+
 		return board[r-1][c-1];
 	}
-		
 		
 	/**
 	 *	setDimension
@@ -268,7 +262,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("setDimension: setDimension starts");
       	
 		dimension = d;
-		initiliseGrid();
+		initialiseGrid();
 		
       	trace("setDimension: setDimension ends");
 	}
@@ -349,16 +343,11 @@ public class Grid implements GridInterface, Cloneable, Comparable
  
 		assert ((l!=null) && (s!=null));
 		
-      	trace("occupySquare: occupySquare starts");
+      	trace("occupySquare: occupySquare starts" + " : " + s + " : " + l);
 
 		// get the square from the grid, put the symbol on it, and put it back in the grid
-		try {
-			q = getSquare(1);
-			q.setSymbol(s);
-			setSquare(l, q);
-		} catch (IllegalGridException e) {
-			trace("occupySquare: Illegal location");
-		}
+		q = getSquare(l);
+		q.setSymbol(s);
 
       	trace("occupySquare: occupySquare ends");
 	}
@@ -380,18 +369,17 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	public boolean squareOccupied(Location l)
 	{
+		Square q;
+		Symbol s;
+		
 		assert (l!=null);
 		
       	trace("squareOccupied: squareOccupied starts and ends");
 
-		try {
-			Square square = getSquare(l);
-			return !square.isEmpty();
-		} catch(IllegalGridException e){
-			trace("squareOccupied: Illegal location");
+		q = getSquare(l);
+		s = q.getSymbol();
 
-			return false;
-		}
+		return !s.isEmpty();
 	}
 	
 	
@@ -410,18 +398,17 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	public Symbol getSymbol(Location l)
 	{
-		assert (l!=null);
+		Square q;
+		Symbol s;
 		
+		assert (l!=null);
+
       	trace("getSymbol: getSymbol starts and ends");
 
-		try {
-			Square square = getSquare(l);
-			return square.getSymbol();
-		} catch(IllegalGridException e) {
-			trace("getSymbol: Illegal Location");
+		q = getSquare(l);
+		s = q.getSymbol();
 
-			return new Symbol();
-		}
+		return s;
 	}
 	
 	
@@ -441,8 +428,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	public boolean validMove(Location l)
 	{
-		int r;
-		int c;
+		int r, c;
+		boolean isValid;
 
 		assert (l!=null);
 		
@@ -451,11 +438,11 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		r = l.getRow();
 		c = l.getColumn();
 
-		boolean isValid = (r >= 1 && r <= dimension && c >= 1 && c <= dimension);
+		isValid = ((c > 0 && c <= this.dimension) && (r > 0 && r <= this.dimension));
 		
 		// check whether the given location is within the bounds of the grid
       	trace("validMove: validMove ends");
-		return isValid;
+		return ((c > 0 && c <= this.dimension) && (r > 0 && r <= this.dimension));
 	}
 
 
@@ -626,16 +613,16 @@ public class Grid implements GridInterface, Cloneable, Comparable
       	trace("win: win starts");
 
 		// check the diagonals
-  		res=diagWin();    
+  		res = diagWin();    
   		if (res.isEmpty())
   		{
 			// no diagonal win, check the rows
-    		res=horizWin();
+    		res = horizWin();
       
     		if (res.isEmpty())
       		{
 				// no diagonal or horizontal win, check the columns
-      			res=vertWin();
+      			res = vertWin();
       		}
   		}
   
