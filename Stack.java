@@ -80,9 +80,7 @@ public class Stack implements StackInterface
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
-//COMPLETE ME
-
-		return false;	// CHANGE ME
+		return (tos == null);
 	}
 
 
@@ -108,10 +106,10 @@ public class Stack implements StackInterface
 		}
 		else
 		{
-//COMPLETE ME
+			Object result = tos.getData();
 
 			trace("top: top ends");
-			return null;	// CHANGE ME
+			return result;
 		}
 	}
 
@@ -139,7 +137,7 @@ public class Stack implements StackInterface
 		else
 		{
 	      	trace("pop: adjusting top of stack");
-//COMPLETE ME
+			tos = tos.getNext();
 		}
 		
       	trace("pop: pop ends");
@@ -166,7 +164,11 @@ public class Stack implements StackInterface
 		
       	trace("push: push starts");
       	
-//COMPLETE ME
+		n = new Node(o);
+
+		n.setNext(tos);
+
+		tos = n;
 
       	trace("push: push ends");
 	}
