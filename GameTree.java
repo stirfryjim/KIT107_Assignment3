@@ -358,65 +358,60 @@ public class GameTree implements GameTreeInterface
 
 		trace("generateLevelDF: generateLevelDF starts");
 		
-	// Get current grid and level
-    Grid currentGrid = (Grid)getData();
-    int currentLevel = getLevel();
-    
-    // Determine player for this level
-    Player nextPlayer;
-    if (currentLevel % 2 == 0) 
+	if (isEmpty()) 
 	{
-		// Even level player
-        nextPlayer = curr;
-    } else 
-	{
-		// Odd level player
-        nextPlayer = curr.opponent();
-    }
-    
-    // Generate all possible moves
-    for (int column = 1; column <= currentGrid.getDimension(); column++)
-		{
-			// Find first available position in column (from the bottom)
-			for (int row = currentGrid.getDimension(); row >= 1; row--)
-			{
-				//
-				Location moveLocation = new Location(row, column);
-				if (currentGrid.validMove(moveLocation) && !currentGrid.squareOccupied(moveLocation))
-				{
-					// Create new grid 
-					Grid newGrid = (Grid)currentGrid.clone();
-					newGrid.occupySquare(moveLocation, nextPlayer.getSymbol());
-					
-					// Evaluate from popponets perspective
-					int gridWorth = newGrid.evaluateGrid(nextPlayer.opponent());
-					newGrid.setWorth(gridWorth);
-					
-					// Create new gameTree node
-					GameTree newTree = new GameTree(newGrid, currentLevel + 1);
-					
-					if (getChild().isEmpty())
-					{
-						setChild(newTree);
-					}
-					else
-					{
-						// Set sibling and new tree
-						GameTree lastSibling = getChild();
-						while (!lastSibling.getSibling().isEmpty())
-						{
-							lastSibling = lastSibling.getSibling();
-						}
-						lastSibling.setSibling(newTree);
-					}
-
-					s.push(newTree);
-					
-					break;
-				}
-			}
+			return;
 		}
 		
+		Grid currentGrid = (Grid) getData();
+		int currentLevel = getLevel();
+		
+		// Determine whose turn it is
+		Player currentPlayer;
+
+		if (currentLevel % 2 == 0) 
+		{
+			currentPlayer = curr;
+		} else 
+		{
+			currentPlayer = curr.opponent();
+		}
+		
+		for (int col = 1; col <= currentGrid.getDimension(); col++) 
+		{
+			// Find the first empty row in this column (for "gravity")
+			int row = findEmptyRow(currentGrid, col);
+			if (row != -1) 
+			{
+				// Create a new grid 
+				Grid newGrid = (Grid) currentGrid.clone();
+				Location moveLocation = new Location(row, col);
+				newGrid.occupySquare(moveLocation, currentPlayer.getSymbol());
+				
+				// Evaluate the grid from opponents perspective
+				int worth = newGrid.evaluateGrid(currentPlayer.opponent());
+				newGrid.setWorth(worth);
+				
+				// Create new game tree node
+				GameTree newTree = new GameTree(newGrid, currentLevel + 1);
+				
+				if (getChild().isEmpty()) 
+				{
+					setChild(newTree);
+				} else 
+				{
+					// Add as sibling to existing children
+					GameTree sibling = getChild();
+					while (!sibling.getSibling().isEmpty()) 
+					{
+						sibling = sibling.getSibling();
+					}
+					sibling.setSibling(newTree);
+				}
+				
+				s.push(newTree);
+			}
+		}
 		trace("generateLevelDF: generateLevelDF ends");
 	}
 	
