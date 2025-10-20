@@ -21,7 +21,7 @@ public class Connect4 extends Frame implements Connect4Interface, ActionListener
 {
 	//finals
 	protected final boolean TRACING=true;					// do we want to see trace output?
-	protected final boolean HUMAN_VS_COMPUTER=false;		// is the user player against the computer?
+	protected final boolean HUMAN_VS_COMPUTER=true;		// is the user player against the computer?
 
 	protected final int LOW_DIMENSION=4;								// low value for grid size range
 	protected final int HIGH_DIMENSION=12;								// high value for grid size range
