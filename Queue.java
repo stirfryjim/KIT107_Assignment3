@@ -80,8 +80,8 @@ public class Queue implements QueueInterface
 	{
 	   	trace("isEmpty: isEmpty starts and ends");
 
-//COMPLETE ME
-		return false;	//CHANGE ME
+
+		return (first == null);
 	}
 
 
@@ -108,8 +108,8 @@ public class Queue implements QueueInterface
 		else
 		{
 		   	trace("front: front ends");
-//COMPLETE ME
-			return null;	//CHANGE ME
+
+			return first.getData());
 		}
 
 	}
@@ -138,7 +138,7 @@ public class Queue implements QueueInterface
 		else
 		{
 		   	trace("remove: updating first node");
-//COMPLETE ME
+			first = first.getNext();
 		}
 
 	   	trace("remove: remove ends");
@@ -167,7 +167,21 @@ public class Queue implements QueueInterface
 		
 	   	trace("add: add starts");
 
-//COMPLETE ME
+		//Create new node
+		c = new Node(o);
+
+		if(isEmpty())
+		{
+			first = n;
+		} else
+		{
+			c = first;
+			while(c.getNext() != null) 
+			{
+				c = c.getNext();
+			}
+			c.setNext(n);
+		}
 		
 	   	trace("add: add ends");
 	}
