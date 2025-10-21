@@ -358,8 +358,8 @@ public class GameTree implements GameTreeInterface
 
 		trace("generateLevelDF: generateLevelDF starts");
 		
-	if (isEmpty()) 
-	{
+		if (isEmpty()) 
+		{
 			return;
 		}
 		
@@ -377,41 +377,53 @@ public class GameTree implements GameTreeInterface
 			currentPlayer = curr.opponent();
 		}
 		
-		for (int col = 1; col <= currentGrid.getDimension(); col++) 
+		 for (int col = 1; col <= currentGrid.getDimension(); col++) 
 		{
-			// Find the first empty row in this column (for "gravity")
-			int row = findEmptyRow(currentGrid, col);
-			if (row != -1) 
+        // Find the lowest empty row in this column
+        int targetRow = -1;
+        boolean foundEmpty = false;
+        
+        for (int row = currentGrid.getDimension(); row >= 1 && !foundEmpty; row--) 
+		{
+            Location testLocation = new Location(row, col);
+            if (!currentGrid.squareOccupied(testLocation)) 
 			{
-				// Create a new grid 
-				Grid newGrid = (Grid) currentGrid.clone();
-				Location moveLocation = new Location(row, col);
-				newGrid.occupySquare(moveLocation, currentPlayer.getSymbol());
-				
-				// Evaluate the grid from opponents perspective
-				int worth = newGrid.evaluateGrid(currentPlayer.opponent());
-				newGrid.setWorth(worth);
-				
-				// Create new game tree node
-				GameTree newTree = new GameTree(newGrid, currentLevel + 1);
-				
-				if (getChild().isEmpty()) 
+                targetRow = row;
+                foundEmpty = true;
+            }
+        }
+        
+        if (targetRow != -1) 
+		{
+            // Create new grid with this move
+            Grid newGrid = (Grid) currentGrid.clone();
+            Location moveLocation = new Location(targetRow, col);
+            newGrid.occupySquare(moveLocation, currentPlayer.getSymbol());
+            
+            // Calculate worth from opponent's perspective
+            int worth = newGrid.evaluateGrid(currentPlayer.opponent());
+            newGrid.setWorth(worth);
+            
+            // Create new game tree node
+            GameTree newTree = new GameTree(newGrid, currentLevel + 1);
+            
+            if (getChild().isEmpty()) 
+			{
+                setChild(newTree);
+            } else 
+			{
+                // Find the last sibling and add new tree as its sibling
+                GameTree lastSibling = getChild();
+                while (!lastSibling.getSibling().isEmpty()) 
 				{
-					setChild(newTree);
-				} else 
-				{
-					// Add as sibling to existing children
-					GameTree sibling = getChild();
-					while (!sibling.getSibling().isEmpty()) 
-					{
-						sibling = sibling.getSibling();
-					}
-					sibling.setSibling(newTree);
-				}
-				
-				s.push(newTree);
-			}
-		}
+                    lastSibling = lastSibling.getSibling();
+                }
+                lastSibling.setSibling(newTree);
+            }
+
+            s.push(newTree);
+        }
+    }
 		trace("generateLevelDF: generateLevelDF ends");
 	}
 	
@@ -449,7 +461,41 @@ public class GameTree implements GameTreeInterface
 			
 		trace("buildGameDF: buildGameDF starts");
 
-//COMPLETE ME
+		s.push(this);
+
+		 boolean processing = true;
+    
+    while (!s.isEmpty() && processing) 
+	{
+        try 
+		{
+            t = (GameTree) s.top();
+            s.pop();
+            
+            // If this node is not at desired depth and game is not over
+            if (t.getLevel() < d && !((Grid) t.getData()).gameOver()) 
+			{
+                // Generate next level if no children exist
+                if (t.getChild().isEmpty()) 
+				{
+                    t.generateLevelDF(s, curr);
+                } else 
+				{
+                    // Push children and siblings for traversal
+                    GameTree child = t.getChild();
+                    while (!child.isEmpty()) 
+					{
+                        s.push(child);
+                        child = child.getSibling();
+                    }
+                }
+            }
+        } catch (EmptyStackException e) 
+		{
+            // Stack is empty, stop processing
+            processing = false;
+        }
+    }
 		
 		trace("buildGameDF: buildGameDF ends");
 	}
