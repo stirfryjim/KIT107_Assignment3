@@ -325,7 +325,7 @@ public class GameTree implements GameTreeInterface
 		}
 		  
 		// non-empty tree, need to update the instance variable
-		root.setSeibling(t.root);
+		root.setSibling(t.root);
 
 		trace("setSibling: setSibling ends");
 	}
@@ -674,7 +674,7 @@ public class GameTree implements GameTreeInterface
 		// go to the next level and find the move we've chosen
   		t=getChild();
   		found=false;
-    	while (!found)
+    	while (!found && !t.isEmpty())
     	{
       		trace("findBest: Move is: " + ((Grid)t.getData()).toString());
     		if (((Grid)t.getData()).getWorth() == v)
