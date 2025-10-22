@@ -2,7 +2,7 @@
 /**
  *	Symbol ADT
  *
- *	@author Mel Goulding 745749
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version October 2025
  *	
  *	This file holds the Symbol ADT which represents
@@ -96,6 +96,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 		
       	trace("setColour: setColour starts");
 
+		// sets parameter color to the variable
 		this.colour = c;
 
       	trace("setColour: setColour ends");
@@ -117,6 +118,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("makeEmpty: makeEmpty starts");
 
+		// flips objects empty record to true and overrides color 
 		this.empty = true;
 		this.colour = BLANK;
 
@@ -138,6 +140,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("getColour: getColour starts and ends");
 
+		// returns color of object
 		return colour;	
 	}
 	
@@ -156,7 +159,8 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
-		return empty;	
+		// returns objects emptiness record
+		return empty;
 	}
 	
 	
@@ -218,6 +222,7 @@ public class Symbol implements SymbolInterface, Cloneable, Comparable
 		
       	trace("equals: equals starts and ends");
 
+		// returns objects symbols if they're the same
 		return (isEmpty() && s.isEmpty()) || (colour == s.getColour());	
 	}
 	

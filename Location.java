@@ -2,7 +2,7 @@
 /**
  *	Location ADT
  *
- *	@author Mel Goulding 745749
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version October 2025
  *	
  *	This file holds the Location ADT which represents
@@ -40,6 +40,7 @@ public class Location implements LocationInterface, Cloneable
 	{
       	trace("Location: Constructor starts");
 
+		// assigns row and column parameters
 		this.row = r;
 		this.column = c;
 
@@ -62,6 +63,7 @@ public class Location implements LocationInterface, Cloneable
 	{
       	trace("setRow: setRow starts");
 
+		// assigns the row parameter(vertical)
 		this.row = r;
 
       	trace("setRow: setRow ends");
@@ -83,6 +85,7 @@ public class Location implements LocationInterface, Cloneable
 	{
       	trace("setColumn: setColumn starts");
 
+		// assigns the column parameter(horizontal)
 		this.column = c;
 
       	trace("setColumn: setColumn ends");
@@ -104,6 +107,7 @@ public class Location implements LocationInterface, Cloneable
 	{
       	trace("getRow: getRow starts and ends");
 
+		// returns objects vertical value
 		return this.row;	// CHANGE ME
 	}
 	
@@ -123,7 +127,8 @@ public class Location implements LocationInterface, Cloneable
 	{
       	trace("getColumn: getColumn starts and ends");
 
-		return this.column;	// CHANGE ME
+		// returns objects horizontal value
+		return this.column;
 	}
 	
 	
@@ -143,10 +148,12 @@ public class Location implements LocationInterface, Cloneable
 		
       	trace("clone: clone starts");
 
+		// creates a copy of the object
 		l = new Location(row, column);
 
       	trace("clone: clone ends");
-		return l;  // CHANGE ME
+		//returns copy
+		return l; 
 	}
 	
 	

@@ -2,7 +2,7 @@
 /**
  *	Stack ADT
  *
- *	@author <<Your names and Student IDs>>
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version October 2025
  *	
  *	This file holds the Stack ADT.  The Stack is built
@@ -80,6 +80,7 @@ public class Stack implements StackInterface
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
+		// returns if the stack variables value is null
 		return (tos == null);
 	}
 
@@ -106,9 +107,11 @@ public class Stack implements StackInterface
 		}
 		else
 		{
+			// references the top of the stacks data
 			Object result = tos.getData();
 
 			trace("top: top ends");
+			// returns it
 			return result;
 		}
 	}
@@ -137,6 +140,7 @@ public class Stack implements StackInterface
 		else
 		{
 	      	trace("pop: adjusting top of stack");
+			// reassigns to the next value in the stack
 			tos = tos.getNext();
 		}
 		
@@ -164,10 +168,11 @@ public class Stack implements StackInterface
 		
       	trace("push: push starts");
       	
+		// creates new node with parameter
 		n = new Node(o);
 
+		//inserts new node on top of the staack
 		n.setNext(tos);
-
 		tos = n;
 
       	trace("push: push ends");

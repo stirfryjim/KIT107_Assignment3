@@ -2,7 +2,7 @@
 /**
  *	Queue ADT
  *
- *	@author <<Your names and Student IDs>>
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version October 2025
  *	
  *	This file holds the Queue ADT.  The Queue is built
@@ -80,7 +80,7 @@ public class Queue implements QueueInterface
 	{
 	   	trace("isEmpty: isEmpty starts and ends");
 
-
+		// returns variable if it is empty(null)
 		return (first == null);
 	}
 
@@ -108,7 +108,7 @@ public class Queue implements QueueInterface
 		else
 		{
 		   	trace("front: front ends");
-
+			// returns a reference to the first item of the queue(front)
 			return first.getData(); 
 		}
 
@@ -138,6 +138,7 @@ public class Queue implements QueueInterface
 		else
 		{
 		   	trace("remove: updating first node");
+			// sets firsts value to the next value in the queue
 			first = first.getNext();
 		}
 
@@ -167,9 +168,10 @@ public class Queue implements QueueInterface
 		
 	   	trace("add: add starts");
 
-		//Create new node
+		//creates new node
 		n = new Node(o);
 
+		//adds node to the end of the queue, next to null
 		if(isEmpty())
 		{
 			first = n;

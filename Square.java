@@ -2,7 +2,7 @@
 /**
  *	Square ADT
  *
- *	@author Mel Goulding 745749
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version September 2025
  *	
  *	This file holds the Square ADT which represents
@@ -41,6 +41,7 @@ public class Square implements SquareInterface, Cloneable
 		
       	trace("Square: Constructor starts");
 
+		//stores location and a new default symbol
 		this.loc = l;
 		this.symbol = new Symbol();
 
@@ -67,6 +68,7 @@ public class Square implements SquareInterface, Cloneable
 		
       	trace("Square: Constructor starts");
 
+		//stores location and symbol
 		this.loc = l;
 		this.symbol = s;
 
@@ -90,9 +92,11 @@ public class Square implements SquareInterface, Cloneable
 		assert ((getLocation() != null) && (getSymbol() != null));
       	trace("clone: clone starts");
 
+		// assigns the new square the parameters 
 		s = new Square(loc, symbol);
 
       	trace("clone: clone ends");
+		// returns new clone
 		return s;	
 	}
 	
@@ -195,7 +199,8 @@ public class Square implements SquareInterface, Cloneable
       	trace("isEmpty: isEmpty starts and ends");
 
 		trace("isEmpty: isEmpty ends");
-		return (symbol.isEmpty());	// CHANGE ME
+		// returns if square doesnt contain a symbol
+		return (symbol.isEmpty());
 	}
 	
 	

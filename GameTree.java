@@ -2,7 +2,7 @@
 /**
  *	GameTree ADT
  *
- *	@author <<Your names and Student IDs>>
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version October 2025
  *	
  *	This file holds the GameTree ADT which is a
@@ -61,7 +61,7 @@ public class GameTree implements GameTreeInterface
 	public GameTree(Object o, int l)
 	{
 		trace("GameTree: constructor starts");
-		
+		//Create new root with parameter values "o" and "l"
 		root=new TNode(o,l);
 		
 		trace("GameTree: constructor ends");
@@ -110,7 +110,7 @@ public class GameTree implements GameTreeInterface
 
 		// non-empty tree
 		trace("getData: getData ends");
-		
+		//Returns data from root node
 		return root.getData();	
 	}
 	
@@ -139,7 +139,7 @@ public class GameTree implements GameTreeInterface
 		
 		// non-empty tree
 		trace("getLevel: getLevel ends");
-
+		// Returns level from root node
 		return root.getLevel();	
 	}	
 	
@@ -158,7 +158,7 @@ public class GameTree implements GameTreeInterface
 	*/
 	public GameTree getChild() throws EmptyGameTreeException
 	{
-		GameTree r;
+		GameTree r; 			// Where result of GameTree returns
 		
 		trace("getChild: getChild starts");
 		
@@ -192,7 +192,7 @@ public class GameTree implements GameTreeInterface
 	*/
 	public GameTree getSibling() throws EmptyGameTreeException
 	{
-		GameTree r;
+		GameTree r;				// Where result of GameTree returns
 		
 		trace("getSibling: getSibling starts");
 		
@@ -204,6 +204,7 @@ public class GameTree implements GameTreeInterface
   		}
   		
 		// non-empty tree, need to create a game tree to hold the answer
+		// Create new GameTree with sibling as root
 		r = new GameTree();
 		r.root = root.getSibling();
 
@@ -234,7 +235,7 @@ public class GameTree implements GameTreeInterface
 			trace("setData: empty game tree");
 			throw new EmptyGameTreeException();
 		}
-		
+		// sets data in root node
 		root.setData(o);
 		
 		trace("setData: setData ends");
@@ -658,7 +659,8 @@ public class GameTree implements GameTreeInterface
 		trace("adjustLevel: adjustLevel starts");
 		
 		// traverse the entire tree, reducing the level value of every node by 1
-  		if (! isEmpty()) {
+  		if (! isEmpty()) 
+		{
     		getChild().adjustLevel();
     		getSibling().adjustLevel();
     		trace("adjustLevel: setting level to " + (getLevel()-1));

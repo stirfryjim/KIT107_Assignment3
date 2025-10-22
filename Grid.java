@@ -2,7 +2,7 @@
 /**
  *	Grid ADT
  *
- *	@author <<Your names and Student IDs>>
+ *	@author Chris Luchavez (745963), Mel Goulding(745749)
  *	@version October 2025
  *	
  *	This file holds the Grid ADT which represents
@@ -60,7 +60,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("Grid: Constructor starts");
       	
-		dimension=d;		
+		//sets dimensions and initializes grid
+		dimension=d;
 		initialiseGrid();
 		
       	trace("Grid: Constructor ends");		
@@ -156,7 +157,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	public Object clone()
 	{
-		Grid b;
+		Grid b; // new grid with same dimensions
 		int r,c;
 		Location loc;
 		Symbol s;
@@ -177,7 +178,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 				}
 			}
 		}
-		
+		// copies worth to the cloned grid
 		b.setWorth(this.getWorth());
 
       	trace("clone: clone ends");
@@ -277,6 +278,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		
       	trace("setDimension: setDimension starts");
       	
+		// upgdates dimension and initialize grid again
 		dimension = d;
 		initialiseGrid();
 		
@@ -298,6 +300,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("getDimension: getDimension starts and ends");
 
+		// returns grid dimension
 		return dimension;
 	}
 
@@ -316,7 +319,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("setWorth: setWorth starts");
       			
-		value = v;
+		value = v; // sets grid worth
 
       	trace("setWorth: setWorth ends");
 	}
@@ -336,6 +339,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
       	trace("getWorth: getWorth starts and ends");
 
+		// returns grid value
 		return value;
 	}
 	
@@ -391,10 +395,11 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		assert (l!=null);
 		
       	trace("squareOccupied: squareOccupied starts and ends");
-
+		// Get symbol at square
 		q = getSquare(l);
 		s = q.getSymbol();
 
+		// checks if square is not empty
 		return !s.isEmpty();
 	}
 	
@@ -421,9 +426,11 @@ public class Grid implements GridInterface, Cloneable, Comparable
 
       	trace("getSymbol: getSymbol starts and ends");
 
+		//also sets the symbol of the square
 		q = getSquare(l);
 		s = q.getSymbol();
 
+		// return symbol
 		return s;
 	}
 	
@@ -450,6 +457,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		
       	//trace("validMove: validMove starts");
       	
+		// stores location row and column
 		r = l.getRow();
 		c = l.getColumn();
 		
@@ -539,6 +547,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
  		
       	trace("equals: equals starts and ends");
 
+		// checks if the grids are equivalent
 		return (this.compareTo(g) == 0);
  	}
 
@@ -595,6 +604,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	public boolean gameOver()
 	{
+		// the result of the game
 		boolean res=false;
 
       	trace("gameOver: gameOver starts");
