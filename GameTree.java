@@ -2,7 +2,7 @@
 /**
  *	GameTree ADT
  *
- *	@author Chris Luchavez (745963), Mel Goulding(745749)
+ *	@author Chris Luchavez (745963), Mel Goulding (745749)
  *	@version October 2025
  *	
  *	This file holds the GameTree ADT which is a
@@ -11,6 +11,8 @@
  *	"root" field which refers to a TNode object
  *	which has a "data" field and "child" and
  *	"sibling" references, and a "level" value.
+ *  
+ *  Work Split: 50:50
  *	
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */
@@ -36,6 +38,7 @@ public class GameTree implements GameTreeInterface
 	{
 		trace("GameTree: constructor starts");
 		
+		// set empty root node
 		this.root = null;
 		
 		trace("GameTree: constructor ends");
@@ -61,6 +64,7 @@ public class GameTree implements GameTreeInterface
 	public GameTree(Object o, int l)
 	{
 		trace("GameTree: constructor starts");
+		
 		//Create new root with parameter values "o" and "l"
 		root=new TNode(o,l);
 		
@@ -82,6 +86,7 @@ public class GameTree implements GameTreeInterface
 	{
 		trace("isEmpty: isEmpty starts and ends");
 		
+		// check if the root is empty
 		return (root == null);
 	}
 
@@ -169,9 +174,10 @@ public class GameTree implements GameTreeInterface
 			throw new EmptyGameTreeException();
 		}
   
-		// non-empty tree, need to create a game tree to hold the answer
-		r=new GameTree();
-		r.root=root.getChild();
+		// create a game-tree for non-empty, put the child of the root in there
+
+		r = new GameTree();
+		r.root = root.getChild();
 
 		trace("getChild: getChild ends");
 		return r;
@@ -358,21 +364,35 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void generateLevelDF(Stack s,Player curr)
 	{
-		Grid currentGrid, hollowGrid;
-		int currentLevel, gridLevel;
-		int gridDimension;
-		Player currentPlayer;
-		Location loc;
-
+		// literal grid game 
+		Grid currentGrid; // The game board
+		int gridDimension; // dimensions of said game-board
+		int currentLevel; // the current level of the game board
+		
+		// imagined grid game
+		Grid hollowGrid; // imagined Grid object
+		int gridLevel; // next Grid level
+		int row, col; // rows and columns of the imagined Grid (same dimensions as game board)
+		Location loc; // location object based on the rows and columns
+		Player currentPlayer; // the current imagined player
+		boolean moveMade; // when the move has been made
+		GameTree alternative; // the tree object of the imagined move
+				
 		assert ((s!=null) && (curr!=null));
 
 		trace("generateLevelDF: generateLevelDF starts");
 		
+		// determine the values of the game grid
 		currentGrid = (Grid) getData();
 		currentLevel = getLevel();
 		gridDimension = currentGrid.getDimension();
 		
+		// imagination begins
+
+		// imagine the next level of the game tree
 		gridLevel = (currentLevel + 1);
+
+		// imagine the player of the next level
 		if (gridLevel % 2 == 0) 
 		{
 			currentPlayer = curr; 
@@ -381,11 +401,12 @@ public class GameTree implements GameTreeInterface
 		{
 			currentPlayer = curr.opponent();
 		}
-		
+
+		/*	imagine a new grid for each of the possible and viable spots for the game
+		 * 		for each of the columns of the grid slide an imaginary piece down till it fits
+		 */
 		if (!currentGrid.gameOver()) 
 		{
-			int row, col;
-			boolean moveMade;
 			for (col = gridDimension; col > 0; col--)
 			{
 				moveMade = false;
@@ -403,22 +424,15 @@ public class GameTree implements GameTreeInterface
 						hollowGrid.occupySquare(loc, currentPlayer.getSymbol()); 
 						hollowGrid.setWorth(hollowGrid.evaluateGrid(currentPlayer));
 
-						GameTree alternative = new GameTree(hollowGrid, gridLevel); 
+						alternative = new GameTree(hollowGrid, gridLevel); 
 
-						GameTree firstChild = this.getChild();
-						// employing a stack stack traversal here is costly for the computer but it gets the job done and I am scared to remove it
 						if (this.getChild().isEmpty()) 
 						{
 							this.setChild(alternative);
 						}
 						else
 						{
-							GameTree last = firstChild;
-							while (!last.getSibling().isEmpty())
-							{
-								last = last.getSibling();
-							}
-							last.setSibling(alternative);
+							this.getChild().setSibling(alternative);
 						}
 						
 						s.push(alternative);
@@ -464,22 +478,24 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void buildGameDF(Stack s, Player curr, int d)
 	{
-		Grid gameGrid;
-		GameTree t;
+		Grid gameGrid; // the game grid 
+		GameTree t; // new branches of possibilities
 		
 		assert ((!isEmpty()) && (s!=null) && (curr!=null) && (d>0));
 			
 		trace("buildGameDF: buildGameDF starts");
 
-		gameGrid = (Grid) root.getData();
+		gameGrid = (Grid) root.getData(); 
 
 		if ((getLevel() >= d) || gameGrid.gameOver())
 		{	
-			return;
+			return; // stop
 		} 
 
-		generateLevelDF(s, curr);
+		// generate the branches
+		generateLevelDF(s, curr); 
 		
+		// call this method again until the stack is empty
 		if (!s.isEmpty())
 		{
 			t = (GameTree) s.top();	
@@ -513,40 +529,55 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void generateLevelBF(Queue q,Player curr)
 	{
-		Grid currentGrid, hollowGrid;
-		int currentLevel, gridLevel;
-		int gridDimension;
-		Player currentPlayer;
-		Location loc;
+		// literal grid game
+		Grid currentGrid; // The game board
+		int gridDimension; // dimensions of said game-board
+		int currentLevel; // the current level of the game board
+		
+		// imagined grid game
+		Grid hollowGrid; // imagined Grid object
+		int gridLevel; // next Grid level
+		int row, col; // rows and columns of the imagined Grid (same dimensions as game board)
+		Location loc; // location object based on the rows and columns
+		Player currentPlayer; // the current imagined player
+		boolean moveMade; // when the move has been made
+		GameTree alternative; // the tree object of the imagined move
 
 		assert ((q!=null) && (curr!=null));
 
 		trace("generateLevelBF: generateLevelBF starts");
 		
+		// initialise all the elements of the current grid
 		currentGrid = (Grid) getData();
 		currentLevel = getLevel();
 		gridDimension = currentGrid.getDimension();
 		
+		// imagination begins
+
+		// imagine the next level of the tree
 		gridLevel = (currentLevel + 1);
+
+		// imagine the player of the next level
 		if (gridLevel % 2 == 0) 
 		{
-			currentPlayer = curr; 
+			currentPlayer = curr;
 		}
 		else
 		{
 			currentPlayer = curr.opponent();
 		}
 		
+		/*	imagine a new grid for each of the possible and viable spots for the game
+		 * 		for each of the columns of the grid slide an imaginary piece down till it fits
+		 */
 		if (!currentGrid.gameOver()) 
 		{
-			int row, col;
-			boolean moveMade;
 			for (col = gridDimension; col > 0; col--)
 			{
 				moveMade = false;
+				// since Grid is initialised with Row 4 as the lowest, row will equal the max dimension of the grid
 				row = gridDimension;
 				while (!moveMade && row >= 1)
-				// since Grid is initialised with Row 4 as the lowest
 				{
 					loc = new Location(row, col);
 
@@ -558,22 +589,15 @@ public class GameTree implements GameTreeInterface
 						hollowGrid.occupySquare(loc, currentPlayer.getSymbol()); 
 						hollowGrid.setWorth(hollowGrid.evaluateGrid(currentPlayer));
 
-						GameTree alternative = new GameTree(hollowGrid, gridLevel); 
-
-						GameTree firstChild = this.getChild();
-						// employing a stack stack traversal here is costly for the computer but it gets the job done and I am scared to remove it
+						alternative = new GameTree(hollowGrid, gridLevel); 
+						
 						if (this.getChild().isEmpty()) 
 						{
 							this.setChild(alternative);
 						}
 						else
 						{
-							GameTree last = firstChild;
-							while (!last.getSibling().isEmpty())
-							{
-								last = last.getSibling();
-							}
-							last.setSibling(alternative);
+							this.getChild().setSibling(alternative);
 						}
 						
 						q.add(alternative);
@@ -619,22 +643,25 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void buildGameBF(Queue q, Player curr, int d)
 	{
-		Grid gameGrid;
-		GameTree t;
+		Grid gameGrid; // the game grid
+		GameTree t; // new possibilities
 		
 		assert ((!isEmpty()) && (q!=null) && (curr!=null) && (d>0));
 			
 		trace("buildGameBF: buildGameBF starts");
 		
-		gameGrid = (Grid) root.getData();
+		// establish that the game grid is the root node
+		gameGrid = (Grid) root.getData(); 
 
 		if ((getLevel() >= d) || gameGrid.gameOver())
 		{	
-			return;
+			return; // stop
 		} 
 
+		// generate the possibilities
 		generateLevelBF(q, curr);
 		
+		// call this method again until the queue is empty
 		if (!q.isEmpty())
 		{
 			t = (GameTree) q.front();	

@@ -8,6 +8,8 @@
  *	This file holds the Square ADT which represents
  *	a physical space within a grid.  A Square in a
  *	grid consists of a location, and a symbol.
+ *  
+ *  Work Split: 50:50
  *	
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */
@@ -137,6 +139,7 @@ public class Square implements SquareInterface, Cloneable
 		
       	trace("setLocation: setLocation ends");
 
+		// set the location to the newly specified location
 		this.loc = l;
 
       	trace("setLocation: setLocation ends");

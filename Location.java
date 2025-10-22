@@ -8,6 +8,8 @@
  *	This file holds the Location ADT which represents
  *	indices to (positions within) the two-dimensional grid.
  *	A Location consists of a Row number and a Column number.
+ *  
+ *  Work Split: 50:50
  *	
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */
@@ -108,7 +110,7 @@ public class Location implements LocationInterface, Cloneable
       	trace("getRow: getRow starts and ends");
 
 		// returns objects vertical value
-		return this.row;	// CHANGE ME
+		return this.row;	
 	}
 	
 	

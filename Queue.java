@@ -9,6 +9,8 @@
  *	using a linked list of Node ADTs.  A Queue object
  *	consists of a "first" field which refers to a Node
  *	object.
+ *  
+ *  Work Split: 50:50
  *	
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */
@@ -60,7 +62,8 @@ public class Queue implements QueueInterface
 	{
 	   	trace("Queue: Constructor starts");
 
-		first=new Node(o);
+		// begin the queue with a parameter object
+		first = new Node(o); 
 
 	   	trace("Queue: Constructor ends");
 	}
@@ -164,14 +167,14 @@ public class Queue implements QueueInterface
 	*/
 	public void add(Object o)
 	{
-		Node c, n;
+		Node c, n; // nodes for traversal and creation
 		
 	   	trace("add: add starts");
 
 		//creates new node
 		n = new Node(o);
 
-		//adds node to the end of the queue, next to null
+		//adds node to the end of the queue, before null
 		if(isEmpty())
 		{
 			first = n;

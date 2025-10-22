@@ -9,6 +9,8 @@
  *	pieces within the two-dimensional grid.
  *	A Symbol consists of a representation of a red or blue
  *	disc or empty.
+ *  
+ *  Work Split: 50:50
  *	
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */

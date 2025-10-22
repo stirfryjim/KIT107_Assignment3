@@ -10,7 +10,9 @@
  *	(of	the current position of the solver), a dimension,
  *	a value (of the current board), and a two-dimensional
  *	array (table/matrix) of the squares in the board.
- *	
+ *  
+ *  Work Split: 50:50
+ * 
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */
 
@@ -122,8 +124,8 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/
 	protected void initialiseGrid()
 	{
-		int r,c;
-		Location l;
+		int r,c; // rows and columns of the grid
+		Location l; // location of rows and columns
 		
       	trace("initialiseGrid: initialiseGrid starts");
       	
@@ -158,9 +160,9 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	public Object clone()
 	{
 		Grid b; // new grid with same dimensions
-		int r,c;
-		Location loc;
-		Symbol s;
+		int r, c; // rows and columns of the grid
+		Location loc; // location object of the rows and columns
+		Symbol s; // the symbol used at that object
 		
       	trace("clone: clone starts");
 
@@ -200,7 +202,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	*/	
 	public void setSquare(Location l, Square s) throws IllegalGridException
 	{
-		int r, c;
+		int r, c; // rows and columns
 		
 		assert ((l!=null) && (s!=null));
 		

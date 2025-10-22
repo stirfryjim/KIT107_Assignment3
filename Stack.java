@@ -9,6 +9,8 @@
  *	using a linked list of Node ADTs.  A Stack object
  *	consists of a "tos" field which refers to a Node
  *	object.
+ *  
+ *  Work Split: 50:50
  *	
  *	YOU NEED TO MAKE CHANGES TO THIS FILE!
 */
@@ -36,7 +38,8 @@ public class Stack implements StackInterface
 	{
       	trace("Stack: Constructor ends");
 
-		tos=null;
+		// initialise with an empty top
+		tos = null;
 
       	trace("Stack: Constructor ends");
 	}
@@ -59,7 +62,8 @@ public class Stack implements StackInterface
 	{
       	trace("Stack: Constructor ends");
 
-		tos=new Node(o);
+		// initialises with the parameter object
+		tos = new Node(o); 
 
       	trace("Stack: Constructor ends");
 	}
@@ -80,7 +84,7 @@ public class Stack implements StackInterface
 	{
       	trace("isEmpty: isEmpty starts and ends");
 
-		// returns if the stack variables value is null
+		// checks if the top of the stack exists
 		return (tos == null);
 	}
 
@@ -194,8 +198,8 @@ public class Stack implements StackInterface
 	*/
 	public String toString()
 	{
-		Node c;
-		String s="";
+		Node c; // the current node
+		String s = ""; // return string
 		
       	trace("toString: toString starts");
 
@@ -206,7 +210,7 @@ public class Stack implements StackInterface
 		}
 		else
 		{
-			c=tos;
+			c = tos;
 			while (c != null)
 			{
 				s+=(c.getData().toString() + " ");
