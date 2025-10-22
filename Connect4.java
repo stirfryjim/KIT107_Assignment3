@@ -20,7 +20,7 @@ import java.awt.event.*;
 public class Connect4 extends Frame implements Connect4Interface, ActionListener, MouseListener
 {
 	//finals
-	protected final boolean TRACING=true;					// do we want to see trace output?
+	protected final boolean TRACING=false;					// do we want to see trace output?
 	protected final boolean HUMAN_VS_COMPUTER=true;		// is the user player against the computer?
 
 	protected final int LOW_DIMENSION=4;								// low value for grid size range
