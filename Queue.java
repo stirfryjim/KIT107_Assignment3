@@ -109,7 +109,7 @@ public class Queue implements QueueInterface
 		{
 		   	trace("front: front ends");
 
-			return first.getData());
+			return first.getData(); 
 		}
 
 	}
@@ -163,12 +163,12 @@ public class Queue implements QueueInterface
 	*/
 	public void add(Object o)
 	{
-		Node c,n;
+		Node c, n;
 		
 	   	trace("add: add starts");
 
 		//Create new node
-		c = new Node(o);
+		n = new Node(o);
 
 		if(isEmpty())
 		{

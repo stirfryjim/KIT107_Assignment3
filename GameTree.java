@@ -405,6 +405,7 @@ public class GameTree implements GameTreeInterface
 						GameTree alternative = new GameTree(hollowGrid, gridLevel); 
 
 						GameTree firstChild = this.getChild();
+						// employing a stack stack traversal here is costly for the computer but it gets the job done and I am scared to remove it
 						if (this.getChild().isEmpty()) 
 						{
 							this.setChild(alternative);
@@ -511,12 +512,80 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void generateLevelBF(Queue q,Player curr)
 	{
-	
+		Grid currentGrid, hollowGrid;
+		int currentLevel, gridLevel;
+		int gridDimension;
+		Player currentPlayer;
+		Location loc;
+
 		assert ((q!=null) && (curr!=null));
 
 		trace("generateLevelBF: generateLevelBF starts");
 		
-//COMPLETE ME
+		currentGrid = (Grid) getData();
+		currentLevel = getLevel();
+		gridDimension = currentGrid.getDimension();
+		
+		gridLevel = (currentLevel + 1);
+		if (gridLevel % 2 == 0) 
+		{
+			currentPlayer = curr; 
+		}
+		else
+		{
+			currentPlayer = curr.opponent();
+		}
+		
+		if (!currentGrid.gameOver()) 
+		{
+			int row, col;
+			boolean moveMade;
+			for (col = gridDimension; col > 0; col--)
+			{
+				moveMade = false;
+				row = gridDimension;
+				while (!moveMade && row >= 1)
+				// since Grid is initialised with Row 4 as the lowest
+				{
+					loc = new Location(row, col);
+
+					if ((!currentGrid.squareOccupied(loc))) 
+					{
+						hollowGrid = (Grid) currentGrid.clone();
+
+						moveMade = true;
+						hollowGrid.occupySquare(loc, currentPlayer.getSymbol()); 
+						hollowGrid.setWorth(hollowGrid.evaluateGrid(currentPlayer));
+
+						GameTree alternative = new GameTree(hollowGrid, gridLevel); 
+
+						GameTree firstChild = this.getChild();
+						// employing a stack stack traversal here is costly for the computer but it gets the job done and I am scared to remove it
+						if (this.getChild().isEmpty()) 
+						{
+							this.setChild(alternative);
+						}
+						else
+						{
+							GameTree last = firstChild;
+							while (!last.getSibling().isEmpty())
+							{
+								last = last.getSibling();
+							}
+							last.setSibling(alternative);
+						}
+						
+						q.add(alternative);
+					}
+					else
+					{
+						row--;
+						loc = new Location(row, col);
+					}
+				}
+
+			}
+		}
 		
 		trace("generateLevelBF: generateLevelBF ends");
 	}
@@ -549,14 +618,28 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void buildGameBF(Queue q, Player curr, int d)
 	{
+		Grid gameGrid;
 		GameTree t;
 		
 		assert ((!isEmpty()) && (q!=null) && (curr!=null) && (d>0));
 			
 		trace("buildGameBF: buildGameBF starts");
 		
-//COMPLETE ME
+		gameGrid = (Grid) root.getData();
+
+		if ((getLevel() >= d) || gameGrid.gameOver())
+		{	
+			return;
+		} 
+
+		generateLevelBF(q, curr);
 		
+		if (!q.isEmpty())
+		{
+			t = (GameTree) q.front();	
+			q.remove();	
+			t.buildGameBF(q, curr, d);	
+		} 		
 		trace("buildGameBF: buildGameBF ends");
 	}				
 
