@@ -36,7 +36,7 @@ public class GameTree implements GameTreeInterface
 	{
 		trace("GameTree: constructor starts");
 		
-		root = null;
+		this.root = null;
 		
 		trace("GameTree: constructor ends");
 	}
@@ -110,8 +110,8 @@ public class GameTree implements GameTreeInterface
 
 		// non-empty tree
 		trace("getData: getData ends");
-//COMPLETE ME
-		return root.getData();	//CHANGE ME
+		
+		return root.getData();	
 	}
 	
 	
@@ -315,6 +315,8 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void setSibling(GameTree t) throws EmptyGameTreeException
 	{
+		GameTree sibling;
+		
 		trace("setSibling: setSibling starts");
 		
 		if (isEmpty())
@@ -324,8 +326,10 @@ public class GameTree implements GameTreeInterface
 			throw new EmptyGameTreeException();
 		}
 		  
+		sibling = t;
+
 		// non-empty tree, need to update the instance variable
-		root.setSibling(t.root);
+		root.setSibling(sibling.root);
 
 		trace("setSibling: setSibling ends");
 	}
@@ -353,77 +357,80 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void generateLevelDF(Stack s,Player curr)
 	{
-	
+		Grid currentGrid, hollowGrid;
+		int currentLevel, gridLevel;
+		int gridDimension;
+		Player currentPlayer;
+		Location loc;
+
 		assert ((s!=null) && (curr!=null));
 
 		trace("generateLevelDF: generateLevelDF starts");
 		
-		if (isEmpty()) 
+		currentGrid = (Grid) getData();
+		currentLevel = getLevel();
+		gridDimension = currentGrid.getDimension();
+		
+		gridLevel = (currentLevel + 1);
+		if (gridLevel % 2 == 0) 
 		{
-			return;
+			currentPlayer = curr; 
 		}
-		
-		Grid currentGrid = (Grid) getData();
-		int currentLevel = getLevel();
-		
-		// Determine whose turn it is
-		Player currentPlayer;
-
-		if (currentLevel % 2 == 0) 
-		{
-			currentPlayer = curr;
-		} else 
+		else
 		{
 			currentPlayer = curr.opponent();
 		}
 		
-		 for (int col = 1; col <= currentGrid.getDimension(); col++) 
+		if (!currentGrid.gameOver()) 
 		{
-        // Find the lowest empty row in this column
-        int targetRow = -1;
-        boolean foundEmpty = false;
-        
-        for (int row = currentGrid.getDimension(); row >= 1 && !foundEmpty; row--) 
-		{
-            Location testLocation = new Location(row, col);
-            if (!currentGrid.squareOccupied(testLocation)) 
+			int row, col;
+			boolean moveMade;
+			for (col = gridDimension; col > 0; col--)
 			{
-                targetRow = row;
-                foundEmpty = true;
-            }
-        }
-        
-        if (targetRow != -1) 
-		{
-            // Create new grid with this move
-            Grid newGrid = (Grid) currentGrid.clone();
-            Location moveLocation = new Location(targetRow, col);
-            newGrid.occupySquare(moveLocation, currentPlayer.getSymbol());
-            
-            // Calculate worth from opponent's perspective
-            int worth = newGrid.evaluateGrid(currentPlayer.opponent());
-            newGrid.setWorth(worth);
-            
-            // Create new game tree node
-            GameTree newTree = new GameTree(newGrid, currentLevel + 1);
-            
-            if (getChild().isEmpty()) 
-			{
-                setChild(newTree);
-            } else 
-			{
-                // Find the last sibling and add new tree as its sibling
-                GameTree lastSibling = getChild();
-                while (!lastSibling.getSibling().isEmpty()) 
+				moveMade = false;
+				row = gridDimension;
+				while (!moveMade && row >= 1)
+				// since Grid is initialised with Row 4 as the lowest
 				{
-                    lastSibling = lastSibling.getSibling();
-                }
-                lastSibling.setSibling(newTree);
-            }
+					loc = new Location(row, col);
 
-            s.push(newTree);
-        }
-    }
+					if ((!currentGrid.squareOccupied(loc))) 
+					{
+						hollowGrid = (Grid) currentGrid.clone();
+
+						moveMade = true;
+						hollowGrid.occupySquare(loc, currentPlayer.getSymbol()); 
+						hollowGrid.setWorth(hollowGrid.evaluateGrid(currentPlayer));
+
+						GameTree alternative = new GameTree(hollowGrid, gridLevel); 
+
+						GameTree firstChild = this.getChild();
+						if (this.getChild().isEmpty()) 
+						{
+							this.setChild(alternative);
+						}
+						else
+						{
+							GameTree last = firstChild;
+							while (!last.getSibling().isEmpty())
+							{
+								last = last.getSibling();
+							}
+							last.setSibling(alternative);
+						}
+						
+						s.push(alternative);
+					}
+					else
+					{
+						row--;
+						loc = new Location(row, col);
+					}
+				}
+
+			}
+		}
+
 		trace("generateLevelDF: generateLevelDF ends");
 	}
 	
@@ -455,47 +462,28 @@ public class GameTree implements GameTreeInterface
 	*/
 	public void buildGameDF(Stack s, Player curr, int d)
 	{
+		Grid gameGrid;
 		GameTree t;
 		
 		assert ((!isEmpty()) && (s!=null) && (curr!=null) && (d>0));
 			
 		trace("buildGameDF: buildGameDF starts");
 
-		s.push(this);
+		gameGrid = (Grid) root.getData();
 
-		 boolean processing = true;
-    
-    while (!s.isEmpty() && processing) 
-	{
-        try 
+		if ((getLevel() >= d) || gameGrid.gameOver())
+		{	
+			return;
+		} 
+
+		generateLevelDF(s, curr);
+		
+		if (!s.isEmpty())
 		{
-            t = (GameTree) s.top();
-            s.pop();
-            
-            // If this node is not at desired depth and game is not over
-            if (t.getLevel() < d && !((Grid) t.getData()).gameOver()) 
-			{
-                // Generate next level if no children exist
-                if (t.getChild().isEmpty()) 
-				{
-                    t.generateLevelDF(s, curr);
-                } else 
-				{
-                    // Push children and siblings for traversal
-                    GameTree child = t.getChild();
-                    while (!child.isEmpty()) 
-					{
-                        s.push(child);
-                        child = child.getSibling();
-                    }
-                }
-            }
-        } catch (EmptyStackException e) 
-		{
-            // Stack is empty, stop processing
-            processing = false;
-        }
-    }
+			t = (GameTree) s.top();	
+			s.pop();	
+			t.buildGameDF(s, curr, d);	
+		} 
 		
 		trace("buildGameDF: buildGameDF ends");
 	}
@@ -720,7 +708,7 @@ public class GameTree implements GameTreeInterface
 		// go to the next level and find the move we've chosen
   		t=getChild();
   		found=false;
-    	while (!found && !t.isEmpty())
+    	while (!found)
     	{
       		trace("findBest: Move is: " + ((Grid)t.getData()).toString());
     		if (((Grid)t.getData()).getWorth() == v)

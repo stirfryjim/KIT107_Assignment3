@@ -158,12 +158,28 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	{
 		Grid b;
 		int r,c;
+		Location loc;
+		Symbol s;
 		
       	trace("clone: clone starts");
 
 		b = new Grid(dimension);
-		initialiseGrid();
 		
+		for (r = 1; r <= dimension; r++)
+		{
+			for (c = 1; c <= dimension; c++)
+			{
+				loc = new Location(r, c);
+				s = getSquare(loc).getSymbol();
+				if (!s.isEmpty())
+				{
+					b.occupySquare(loc, s);
+				}
+			}
+		}
+		
+		b.setWorth(this.getWorth());
+
       	trace("clone: clone ends");
 		return b;
 	}
@@ -227,7 +243,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 
 		assert (l!=null);
 
-      	trace("getSquare: getSquare starts");
+      	//trace("getSquare: getSquare starts");
 		
 		if (!validMove(l))
 		{
@@ -236,7 +252,7 @@ public class Grid implements GridInterface, Cloneable, Comparable
 		}
 		
 		// obtain the square at the indicated location from the grid
-      	trace("getSquare: getSquare ends");
+      	//trace("getSquare: getSquare ends");
 		
 		r = l.getRow();
 		c = l.getColumn();
@@ -429,19 +445,16 @@ public class Grid implements GridInterface, Cloneable, Comparable
 	public boolean validMove(Location l)
 	{
 		int r, c;
-		boolean isValid;
 
 		assert (l!=null);
 		
-      	trace("validMove: validMove starts");
+      	//trace("validMove: validMove starts");
       	
 		r = l.getRow();
 		c = l.getColumn();
-
-		isValid = ((c > 0 && c <= this.dimension) && (r > 0 && r <= this.dimension));
 		
 		// check whether the given location is within the bounds of the grid
-      	trace("validMove: validMove ends");
+      	//trace("validMove: validMove ends");
 		return ((c > 0 && c <= this.dimension) && (r > 0 && r <= this.dimension));
 	}
 
